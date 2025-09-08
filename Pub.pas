@@ -9,7 +9,7 @@ uses
 
 const
   app_name = 'gsJSON';
-  app_version = 'v0.7.0';
+  app_version = 'v0.7.1';
   url_github = 'https://github.com/higale/galeJSON';
 
   c_untitled_filename = 'untitled.json';

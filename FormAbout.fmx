@@ -268,11 +268,11 @@ object fmAbout: TfmAbout
     object txtUrl: TText
       Cursor = crHandPoint
       Position.X = 134.000000000000000000
-      Position.Y = 104.000000000000000000
-      Size.Width = 188.000000000000000000
+      Position.Y = 107.000000000000000000
+      Size.Width = 238.000000000000000000
       Size.Height = 25.000000000000000000
       Size.PlatformDefault = False
-      Text = 'https://github.com/higale'
+      Text = 'https://github.com/higale/galeJSON'
       TextSettings.FontColor = xFF1997FE
       TextSettings.WordWrap = False
       TextSettings.HorzAlign = Leading
