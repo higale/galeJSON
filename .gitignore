@@ -1,0 +1,24 @@
+# Delphi/Embarcadero
+*.~*
+*.identcache
+*.local
+*.stat
+*.tvsconfig
+*.dproj.deployproj
+*.dproj.opendb
+*.dproj.ota
+
+# macOS
+.DS_Store
+
+# VSCode
+.vscode/
+
+# History/Backup
+__history/
+__recovery/
+
+# Output
+Win32/
+Win64/
+OSX64/

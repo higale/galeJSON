@@ -1,0 +1,468 @@
+object FontDialog: TFontDialog
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = Single
+  Caption = 'Text Settings'
+  ClientHeight = 458
+  ClientWidth = 518
+  Position = ScreenCenter
+  Transparency = True
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object pnlSizeBorder: TPanel
+    Align = Client
+    Size.Width = 518.000000000000000000
+    Size.Height = 458.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'panelstyle_radius'
+    TabOrder = 0
+    object btnCancel: TButton
+      ModalResult = 2
+      Position.X = 412.000000000000000000
+      Position.Y = 415.000000000000000000
+      TabOrder = 9
+      Text = 'Cancel'
+      TextSettings.Trimming = None
+    end
+    object Button1: TButton
+      ModalResult = 1
+      Position.X = 324.000000000000000000
+      Position.Y = 415.000000000000000000
+      TabOrder = 10
+      Text = 'OK'
+      TextSettings.Trimming = None
+    end
+    object chkWordWrap: TCheckBox
+      Position.X = 66.000000000000000000
+      Position.Y = 428.000000000000000000
+      Size.Width = 95.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 47
+      Text = 'WordWrap'
+      OnChange = chkWordWrapChange
+    end
+    object cpnlFontColor: TColorPanel
+      Color = claWhite
+      Position.X = 334.000000000000000000
+      Position.Y = 164.000000000000000000
+      Size.Width = 154.000000000000000000
+      Size.Height = 111.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 13
+      OnChange = cpnlFontColorChange
+    end
+    object edtFontColor: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 39
+      ReadOnly = True
+      TextSettings.HorzAlign = Center
+      Position.X = 346.000000000000000000
+      Position.Y = 278.000000000000000000
+      Size.Width = 113.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      OnChange = edtFontColorChange
+    end
+    object edtFontName: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 7
+      Position.X = 31.000000000000000000
+      Position.Y = 69.000000000000000000
+      Size.Width = 189.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      OnChange = edtFontNameChange
+    end
+    object edtFontSize: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 3
+      Position.X = 233.000000000000000000
+      Position.Y = 69.000000000000000000
+      Size.Width = 80.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      OnChange = edtFontSizeChange
+    end
+    object GroupBox1: TGroupBox
+      Enabled = False
+      Position.X = 25.000000000000000000
+      Position.Y = 312.000000000000000000
+      Size.Width = 200.000000000000000000
+      Size.Height = 108.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Align'
+      TabOrder = 12
+      object cbbHorzAlign: TComboBox
+        Items.Strings = (
+          'Leading'
+          'Center'
+          'Trailing')
+        Position.X = 89.000000000000000000
+        Position.Y = 16.000000000000000000
+        Size.Width = 104.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 39
+        OnChange = cbbTextAlignChange
+      end
+      object cbbVertAlign: TComboBox
+        Items.Strings = (
+          'Leading'
+          'Center'
+          'Trailing')
+        Position.X = 88.000000000000000000
+        Position.Y = 46.000000000000000000
+        Size.Width = 104.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 38
+        OnChange = cbbTextAlignChange
+      end
+      object Label2: TLabel
+        Position.X = 15.000000000000000000
+        Position.Y = 19.000000000000000000
+        Size.Width = 66.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'HorzAlign:'
+        TabOrder = 42
+      end
+      object Label3: TLabel
+        Position.X = 18.000000000000000000
+        Position.Y = 49.000000000000000000
+        Size.Width = 66.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'VertAlign:'
+        TabOrder = 41
+      end
+      object Label4: TLabel
+        Position.X = 15.000000000000000000
+        Position.Y = 78.000000000000000000
+        Size.Width = 66.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Trimming = None
+        Text = 'Trimming:'
+        TabOrder = 40
+      end
+      object cbbTrimming: TComboBox
+        Items.Strings = (
+          'None'
+          'Character'
+          'Word')
+        Position.X = 89.000000000000000000
+        Position.Y = 75.000000000000000000
+        Size.Width = 103.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 43
+      end
+    end
+    object grp1: TGroupBox
+      Enabled = False
+      Position.X = 328.000000000000000000
+      Position.Y = 44.000000000000000000
+      Size.Width = 154.000000000000000000
+      Size.Height = 112.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Font Style'
+      TabOrder = 5
+      object chkBold: TCheckBox
+        StyledSettings = [FontColor]
+        Hint = 'Bold'
+        Position.X = 18.000000000000000000
+        Position.Y = 21.000000000000000000
+        Size.Width = 111.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 41
+        Text = 'Bold'
+        TextSettings.Font.Size = 13.000000000000000000
+        TextSettings.Font.StyleExt = {00070000000000000004000000}
+        OnChange = chkFontStyleChange
+      end
+      object chkItalic: TCheckBox
+        StyledSettings = [FontColor]
+        Hint = 'Italic'
+        Position.X = 18.000000000000000000
+        Position.Y = 42.000000000000000000
+        Size.Width = 119.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 40
+        Text = 'Italic'
+        TextSettings.Font.Size = 13.000000000000000000
+        TextSettings.Font.StyleExt = {00040000000200000004000000}
+        OnChange = chkFontStyleChange
+      end
+      object chkUnderline: TCheckBox
+        StyledSettings = [FontColor]
+        Hint = 'Underline'
+        Position.X = 18.000000000000000000
+        Position.Y = 63.000000000000000000
+        Size.Width = 119.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 39
+        Text = 'UnderLine'
+        TextSettings.Font.Size = 13.000000000000000000
+        TextSettings.Font.StyleExt = {04040000000000000004000000}
+        OnChange = chkFontStyleChange
+      end
+      object chkStrikeOut: TCheckBox
+        StyledSettings = [FontColor]
+        Hint = 'StrikeOut'
+        Position.X = 18.000000000000000000
+        Position.Y = 85.000000000000000000
+        Size.Width = 119.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 38
+        Text = 'StrikeOut'
+        TextSettings.Font.Size = 13.000000000000000000
+        TextSettings.Font.StyleExt = {08040000000000000004000000}
+        OnChange = chkFontStyleChange
+      end
+    end
+    object grp2: TGroupBox
+      Position.X = 226.000000000000000000
+      Position.Y = 312.000000000000000000
+      Size.Width = 276.000000000000000000
+      Size.Height = 80.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Demo'
+      TabOrder = 11
+      object txtDemo: TText
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        Position.X = 8.000000000000000000
+        Position.Y = 18.000000000000000000
+        Size.Width = 261.000000000000000000
+        Size.Height = 57.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'ABcd123'#20013#25991'!?'
+      end
+    end
+    object Label1: TLabel
+      Position.X = 233.000000000000000000
+      Position.Y = 44.000000000000000000
+      Size.Width = 78.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Font Size'
+      TabOrder = 1
+    end
+    object Label5: TLabel
+      Position.X = 31.000000000000000000
+      Position.Y = 44.000000000000000000
+      Size.Width = 78.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Family Name'
+      TabOrder = 0
+    end
+    object lstFontName: TListBox
+      Position.X = 31.000000000000000000
+      Position.Y = 91.000000000000000000
+      Size.Width = 189.000000000000000000
+      Size.Height = 209.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 6
+      DisableFocusEffect = True
+      DefaultItemStyles.ItemStyle = ''
+      DefaultItemStyles.GroupHeaderStyle = ''
+      DefaultItemStyles.GroupFooterStyle = ''
+      OnChange = lstFontNameChange
+      Viewport.Width = 185.000000000000000000
+      Viewport.Height = 205.000000000000000000
+    end
+    object lstFontSize: TListBox
+      Position.X = 233.000000000000000000
+      Position.Y = 91.000000000000000000
+      Size.Width = 80.000000000000000000
+      Size.Height = 209.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      DisableFocusEffect = True
+      Items.Strings = (
+        '5'
+        '5.5'
+        '6.5'
+        '7.5'
+        '8'
+        '9'
+        '10'
+        '11'
+        '12'
+        '14'
+        '16'
+        '18'
+        '20'
+        '22'
+        '24'
+        '26'
+        '28'
+        '36'
+        '48'
+        '72')
+      DefaultItemStyles.ItemStyle = ''
+      DefaultItemStyles.GroupHeaderStyle = ''
+      DefaultItemStyles.GroupFooterStyle = ''
+      OnChange = lstFontSizeChange
+      Viewport.Width = 60.000000000000000000
+      Viewport.Height = 205.000000000000000000
+    end
+    object rctTitleBar: TRectangle
+      Align = MostTop
+      Corners = [TopLeft, TopRight]
+      Fill.Color = x80808080
+      HitTest = False
+      Margins.Left = 1.000000000000000000
+      Margins.Top = 1.000000000000000000
+      Margins.Right = 1.000000000000000000
+      Position.X = 1.000000000000000000
+      Position.Y = 1.000000000000000000
+      Size.Width = 516.000000000000000000
+      Size.Height = 34.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Thickness = 0.000000000000000000
+      XRadius = 5.000000000000000000
+      YRadius = 5.000000000000000000
+      object rctTitleBarForMove: TRectangle
+        Align = Client
+        Corners = [TopLeft, TopRight]
+        Fill.Kind = None
+        Locked = True
+        Margins.Left = 1.000000000000000000
+        Margins.Top = 1.000000000000000000
+        Margins.Right = 1.000000000000000000
+        Size.Width = 514.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Kind = None
+        XRadius = 15.000000000000000000
+        YRadius = 15.000000000000000000
+        object Layout1: TLayout
+          Align = Right
+          Position.X = 377.000000000000000000
+          Size.Width = 137.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          object rctBtnClose: TRectangle
+            Align = MostRight
+            Corners = [TopRight]
+            Fill.Color = x00B13B2B
+            Margins.Top = -1.000000000000000000
+            Margins.Right = -1.000000000000000000
+            Position.X = 93.000000000000000000
+            Position.Y = -1.000000000000000000
+            Size.Width = 45.000000000000000000
+            Size.Height = 34.000000000000000000
+            Size.PlatformDefault = False
+            Stroke.Kind = None
+            XRadius = 5.000000000000000000
+            YRadius = 5.000000000000000000
+            OnClick = rctBtnCloseClick
+            object aniForCloseBtn: TColorAnimation
+              Duration = 0.200000002980232200
+              PropertyName = 'Fill.Color'
+              StartValue = x00B13B2B
+              StopValue = xFFB13B2B
+              Trigger = 'IsMouseOver=true'
+              TriggerInverse = 'IsMouseOver=false'
+            end
+            object pathCloseBtn: TPath
+              Align = Center
+              Data.Path = {
+                2200000000000000B4AB0C4400000044010000002F1242440A33954302000000
+                07924544B0338E430200000006924544FCDA8243020000002F12424443B77743
+                0200000082923E44E6B769430200000028E63844E6B76943020000007B663544
+                43B777430100000000000044F0A7E6430100000009339543F2B5774302000000
+                68338E430CB7694302000000C0DA824358B76943020000009AB677439AB67743
+                02000000B4B76943EEDA82430200000000B8694396338E430200000041B77743
+                093395430100000097A8E643000000440100000041B777437B66354402000000
+                E4B7694328E6384402000000E4B7694382923E440200000041B777432F124244
+                02000000FBDA82430792454402000000B0338E43069245440200000009339543
+                2F1242440100000000000044B4AB0C44010000007B6635442F12424402000000
+                28E63844069245440200000082923E4407924544020000002F1242442F124244
+                020000000792454482923E44020000000792454428E63844020000002F124244
+                7B66354401000000B4AB0C440000004403000000B4AB0C4400000044}
+              Locked = True
+              HitTest = False
+              Size.Width = 10.000000000000000000
+              Size.Height = 12.000000000000000000
+              Size.PlatformDefault = False
+              Stroke.Kind = None
+              WrapMode = Fit
+            end
+          end
+        end
+        object lblCaption: TLabel
+          Position.X = 37.000000000000000000
+          Position.Y = 8.000000000000000000
+          Size.Width = 116.000000000000000000
+          Size.Height = 17.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Text Settings'
+          TabOrder = 1
+        end
+      end
+      object Path4: TPath
+        Data.Path = {
+          6000000000000000000066440000D0430100000000001A440000D04302000000
+          66E618440000D0430200000000001844CDCCD14302000000000018440000D443
+          01000000000018440000064402000000000018449A1907440200000066E61844
+          000008440200000000001A440000084401000000000026440000084402000000
+          9A1927440000084402000000000028449A190744020000000000284400000644
+          01000000000028440000F04301000000000037440000F0430100000000003744
+          000048440100000000802B44000048440200000066662A440000484402000000
+          0080294466E64844020000000080294400004A44010000000080294400005644
+          02000000008029449A1957440200000066662A44000058440200000000802B44
+          00005844010000000080544400005844020000009A9955440000584402000000
+          008056449A195744020000000080564400005644010000000080564400004A44
+          020000000080564466E64844020000009A995544000048440200000000805444
+          0000484401000000000049440000484401000000000049440000F04301000000
+          000058440000F04301000000000058440000064402000000000058449A190744
+          0200000066E65844000008440200000000005A44000008440100000000006644
+          00000844020000009A1967440000084402000000000068449A19074402000000
+          000068440000064401000000000068440000D4430200000000006844CDCCD143
+          020000009A1967440000D04302000000000066440000D0430300000000006644
+          0000D04300000000000024440000944301000000000024440000284302000000
+          000024449A992343020000009A19234400002043020000000000224400002043
+          010000000000D04200002043020000003333C74200002043020000000000C042
+          9A992343020000000000C04200002843010000000000C0420000944302000000
+          0000C04233339643020000003333C74200009843020000000000D04200009843
+          0100000000002043000098430200000066662443000098430200000000002843
+          3333964302000000000028430000944301000000000028430000684301000000
+          0000A84300006843010000000000A84300004644010000000000744300004644
+          020000009A996F43000046440200000000006C4366E646440200000000006C43
+          000048440100000000006C43000056440200000000006C439A19574402000000
+          9A996F4300005844020000000000744300005844010000000000FE4300005844
+          020000009A1900440000584402000000000001449A1957440200000000000144
+          00005644010000000000014400004844020000000000014466E6464402000000
+          9A19004400004644020000000000FE4300004644010000000000D04300004644
+          010000000000D043000068430100000000001244000068430100000000001244
+          000094430200000000001244333396430200000066E612440000984302000000
+          0000144400009843010000000000224400009843020000009A19234400009843
+          0200000000002444333396430200000000002444000094430300000000002444
+          00009443}
+        Fill.Color = xFF34B500
+        Locked = True
+        HitTest = False
+        Position.X = 9.000000000000000000
+        Position.Y = 9.000000000000000000
+        Size.Width = 16.000000000000000000
+        Size.Height = 16.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Kind = None
+        WrapMode = Fit
+      end
+    end
+  end
+end

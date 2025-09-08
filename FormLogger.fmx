@@ -1,0 +1,52 @@
+object fmLogger: TfmLogger
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  Caption = #26085#24535
+  ClientHeight = 480
+  ClientWidth = 664
+  Position = ScreenCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object btnClear: TButton
+    Anchors = [akTop, akRight]
+    CanFocus = False
+    Position.X = 576.000000000000000000
+    Position.Y = 8.000000000000000000
+    TabOrder = 0
+    Text = 'Clear'
+    TextSettings.Trimming = None
+    OnClick = btnClearClick
+  end
+  object pnl1: TPanel
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    Position.X = 8.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 560.000000000000000000
+    Size.Height = 464.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object mmoLog: TMemo
+      Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+      DataDetectorTypes = []
+      ReadOnly = True
+      StyledSettings = [Size, Style, FontColor]
+      TextSettings.Font.Family = #23435#20307
+      TextSettings.WordWrap = True
+      Align = Client
+      Margins.Left = 5.000000000000000000
+      Margins.Top = 2.000000000000000000
+      Margins.Right = 2.000000000000000000
+      Margins.Bottom = 2.000000000000000000
+      Size.Width = 553.000000000000000000
+      Size.Height = 460.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Viewport.Width = 549.000000000000000000
+      Viewport.Height = 456.000000000000000000
+    end
+  end
+end
