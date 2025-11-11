@@ -27,8 +27,10 @@
             "actHelpAbout": "About...",
             "strIndent": "Number of indentation spaces",
             "strWordWarp": "Word Wrap",
+            "strFileChangedExternally": "The file has been modified by another program. Click to reload.",
             "strTrue": "Yes",
-            "strFalse": "No"
+            "strFalse": "No",
+            "strJsonError": "The input value is not a valid JSON. Path '%0:s', line %1:d, position %2:d (offset %3:d)"
         }
     },
     {
@@ -59,8 +61,10 @@
             "actHelpAbout": "关于...",
             "strIndent": "缩进格数",
             "strWordWarp": "自动换行",
+            "strFileChangedExternally": "文件已被外部程序修改，点击重新加载。",
             "strTrue": "是",
-            "strFalse": "否"
+            "strFalse": "否",
+            "strJsonError": "输入值不是有效的 JSON 格式。路径:%0:s，行号:%1:d，位置:%2:d（偏移量:%3:d）"
         }
     },
     {
@@ -91,8 +95,10 @@
             "actHelpAbout": "關於...",
             "strIndent": "縮排格數",
             "strWordWarp": "自動換行",
+            "strFileChangedExternally": "檔案已被外部程式修改，點擊重新載入。",
             "strTrue": "是",
-            "strFalse": "否"
+            "strFalse": "否",
+            "strJsonError": "輸入值不是有效的 JSON 格式。路徑:%0:s，行號:%1:d，位置:%2:d（偏移量:%3:d）"
         }
     },
     {
@@ -123,8 +129,10 @@
             "actHelpAbout": "バージョン情報...",
             "strIndent": "インデント幅",
             "strWordWarp": "自動改行",
+            "strFileChangedExternally": "ファイルが外部プログラムによって変更されました。クリックして再読み込み。",
             "strTrue": "はい",
-            "strFalse": "いいえ"
+            "strFalse": "いいえ",
+            "strJsonError": "入力値は有効なJSON形式ではありません。パス:%0:s、行:%1:d、位置:%2:d（オフセット:%3:d）"
         }
     },
     {
@@ -155,8 +163,10 @@
             "actHelpAbout": "프로그램 정보...",
             "strIndent": "들여쓰기 크기",
             "strWordWarp": "자동 줄바꿈",
+            "strFileChangedExternally": "파일이 외부 프로그램에 의해 변경되었습니다. 클릭하여 다시 불러옵니다.",
             "strTrue": "예",
-            "strFalse": "아니오"
+            "strFalse": "아니오",
+            "strJsonError": "입력 값이 유효한 JSON 형식이 아닙니다. 경로:%0:s, 행:%1:d, 위치:%2:d (오프셋:%3:d)"
         }
     },
     {
@@ -187,8 +197,10 @@
             "actHelpAbout": "À propos...",
             "strIndent": "Taille indentation",
             "strWordWarp": "Retour ligne auto",
+            "strFileChangedExternally": "Le fichier a été modifié par un autre programme. Cliquez pour recharger.",
             "strTrue": "Oui",
-            "strFalse": "Non"
+            "strFalse": "Non",
+            "strJsonError": "La valeur saisie n'est pas un JSON valide. Chemin:'%0:s', ligne %1:d, position %2:d (décalage %3:d)"
         }
     },
     {
@@ -219,8 +231,10 @@
             "actHelpAbout": "Über...",
             "strIndent": "Einrückungsgröße",
             "strWordWarp": "Auto-Zeilenumbruch",
+            "strFileChangedExternally": "Die Datei wurde von einem anderen Programm geändert. Klicken Sie zum Neuladen.",
             "strTrue": "Ja",
-            "strFalse": "Nein"
+            "strFalse": "Nein",
+            "strJsonError": "Der eingegebene Wert ist kein gültiges JSON. Pfad:'%0:s', Zeile %1:d, Position %2:d (Offset %3:d)"
         }
     },
     {
@@ -251,8 +265,10 @@
             "actHelpAbout": "Acerca de...",
             "strIndent": "Tamaño sangría",
             "strWordWarp": "Salto línea auto",
+            "strFileChangedExternally": "El archivo ha sido modificado por otro programa. Haz clic para recargar.",
             "strTrue": "Sí",
-            "strFalse": "No"
+            "strFalse": "No",
+            "strJsonError": "El valor ingresado no es un JSON válido. Ruta:'%0:s', línea %1:d, posición %2:d (desplazamiento %3:d)"
         }
     },
     {
@@ -283,8 +299,10 @@
             "actHelpAbout": "О программе...",
             "strIndent": "Размер отступа",
             "strWordWarp": "Авто-перенос",
+            "strFileChangedExternally": "Файл был изменён другой программой. Нажмите, чтобы перезагрузить.",
             "strTrue": "Да",
-            "strFalse": "Нет"
+            "strFalse": "Нет",
+            "strJsonError": "Введённое значение не является допустимым JSON. Путь:'%0:s', строка %1:d, позиция %2:d (смещение %3:d)"
         }
     },
     {
@@ -315,8 +333,10 @@
             "actHelpAbout": "Informazioni...",
             "strIndent": "Dimensione rientro",
             "strWordWarp": "A capo automatico",
+            "strFileChangedExternally": "Il file è stato modificato da un altro programma. Clicca per ricaricare.",
             "strTrue": "Sì",
-            "strFalse": "No"
+            "strFalse": "No",
+            "strJsonError": "Il valore inserito non è un JSON valido. Percorso:'%0:s', riga %1:d, posizione %2:d (offset %3:d)"
         }
     },
     {
@@ -347,8 +367,10 @@
             "actHelpAbout": "Sobre...",
             "strIndent": "Tamanho indentação",
             "strWordWarp": "Quebra linha auto",
+            "strFileChangedExternally": "O arquivo foi modificado por outro programa. Clique para recarregar.",
             "strTrue": "Sim",
-            "strFalse": "Não"
+            "strFalse": "Não",
+            "strJsonError": "O valor inserido não é um JSON válido. Caminho:'%0:s', linha %1:d, posição %2:d (deslocamento %3:d)"
         }
     },
     {
@@ -379,8 +401,10 @@
             "actHelpAbout": "Over...",
             "strIndent": "Inspring grootte",
             "strWordWarp": "Auto regelafbreking",
+            "strFileChangedExternally": "Het bestand is gewijzigd door een ander programma. Klik om te herladen.",
             "strTrue": "Ja",
-            "strFalse": "Nee"
+            "strFalse": "Nee",
+            "strJsonError": "De ingevoerde waarde is geen geldige JSON. Pad:'%0:s', regel %1:d, positie %2:d (offset %3:d)"
         }
     }
 ]

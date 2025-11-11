@@ -6,7 +6,7 @@ uses
   System.Classes, System.JSON, System.SysUtils, System.IOUtils;
 
 type
-  TOnFilenameChanged = reference to procedure(ASender: TObject);
+  TOnFilenameChanged = reference to procedure(ASender: TObject; AOld, ANew: string);
 
   TJsonDocument = class
   private
@@ -32,7 +32,7 @@ type
 
 implementation
 
-uses Logger, jsonhelper, pub;
+uses Logger, jsonhelper, pub, FormMain;
 
 constructor TJsonDocument.Create;
 begin
@@ -56,10 +56,24 @@ begin
 end;
 
 procedure TJsonDocument.SetFilename(const AValue: string);
+var
+  LOldFilename: string;
 begin
-  //if FFilename = AValue then
-   // Exit;
+  LOldFilename := FFilename;
   FFilename := AValue;
+  if LOldFilename <> FFilename then
+  begin
+    if not LOldFilename.IsEmpty then
+    begin
+      fmMain.FileWatcher.RemoveTarget(LOldFilename);
+      g_Logger.Debug('移除文件监控:' + LOldFilename);
+    end;
+    if not FFilename.IsEmpty then
+    begin
+      fmMain.FileWatcher.AddFile(FFilename);
+      g_Logger.Debug('添加文件监控:' + FFilename);
+    end;
+  end;
   if FFilename <> '' then
   begin
     for var i := g_pub.Config['recent'].Count - 1 downto 0 do
@@ -74,7 +88,7 @@ begin
     g_pub.SaveConfig;
   end;
   if Assigned(FOnFilenameChanged) then
-    FOnFilenameChanged(Self);
+    FOnFilenameChanged(Self, LOldFilename, FFilename);
 end;
 
 procedure TJsonDocument.New(AValue: TJsonValue = nil);
@@ -120,14 +134,20 @@ var
 begin
   g_Logger.Info('Save File: ' + AFileName);
   strs := TStringList.Create;
+  fmMain.FileWatcher.Pause;
   try
-    strs.WriteBOM := AWriteBOM;
-    strs.Text := JSONFormat(FJsonRoot, AIndentation, AEncodeBelow32, AEncodeAbove127);
-    strs.SaveToFile(AFileName, TEncoding.UTF8);
-    Filename := AFileName;
+    try
+      strs.WriteBOM := AWriteBOM;
+      strs.Text := JSONFormat(FJsonRoot, AIndentation, AEncodeBelow32, AEncodeAbove127);
+      strs.SaveToFile(AFileName, TEncoding.UTF8);
+      Filename := AFileName;
+    finally
+      strs.Free;
+    end;
   finally
-    strs.Free;
+    fmMain.FileWatcher.Resume(True);
   end;
+
 end;
 
 end.

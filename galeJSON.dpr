@@ -21,7 +21,8 @@ uses
   FMXTrayIcon in 'utils\FMXTrayIcon.pas',
   DocWinList in 'DocWinList.pas',
   SaveDialogsEnhanced in 'utils\SaveDialogsEnhanced.pas',
-  Pub in 'Pub.pas';
+  Pub in 'Pub.pas',
+  FileWatcher in 'utils\FileWatcher.pas';
 
 {$R *.res}
 

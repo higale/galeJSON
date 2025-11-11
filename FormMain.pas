@@ -9,7 +9,7 @@ uses
 {$ELSE}
   FMXTrayIcon, FMX.Platform.Win, Winapi.Windows,
 {$ENDIF}
-  SaveDialogsEnhanced,
+  SaveDialogsEnhanced, FileWatcher,
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, System.IOUtils,
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Objects, System.Actions,
@@ -89,6 +89,7 @@ type
     procedure actFileClearRecentExecute(Sender: TObject);
   private
     FSaveDialog: TEnhancedSaveDialog;
+    FFileWatcher: TFileWatcher;
 {$IFDEF MSWINDOWS}
     FTrayIcon: TTrayIcon;
     procedure OnRunOnlyOnce(ASender: TObject; AParams: TArray<String>);
@@ -96,6 +97,7 @@ type
     procedure InitMacOsMenu;
 {$ENDIF}
   public
+    property FileWatcher: TFileWatcher read FFileWatcher write FFileWatcher;
 {$IFDEF MACOS}
     procedure InitMacOsRecentFile;
     procedure RecentFileClick(Sender: TObject);
@@ -296,6 +298,38 @@ var
 begin
   Left := -102400;
   fmLogger := TfmLogger.Create(nil);
+  FFileWatcher := TFileWatcher.Create(1000);
+  FFileWatcher.OnFileChanged := procedure(const FileName: string; ChangedType: TFileChangeType; const WatchTarget: TWatchTarget)
+    var
+      LDForm: TDocumentWindow;
+    begin
+      g_Logger.Info('文件发生变化:' + FileName);
+      LDForm := g_pub.DocumentWindowList.GetWindowByFilename(FileName);
+      if LDForm <> nil then
+      begin
+        LDForm.rctFileChangedExternally.Visible := True;
+      end;
+    end;
+
+  FFileWatcher.OnWatchErrorEvent := procedure(const AErr: string)
+    begin
+      g_Logger.Error('FileWatcher.OnError: ' + AErr);
+    end;
+
+  FFileWatcher.OnWatchTargetsChanged := procedure(const Target: TWatchTarget; ChangeType: TWatchTargetChangeType)
+    begin
+      case ChangeType of
+        wtcAdded:
+          g_Logger.Debug('添加监控: ' + Target.Path);
+        wtcRemoved:
+          g_Logger.Debug('移除监控: ' + Target.Path);
+        wtcCleared:
+          begin
+            g_Logger.Debug('清空监控');
+          end;
+      end;
+    end;
+  FFileWatcher.StartWatching;
 {$IFDEF MACOS} // 初始化mac下的语言选择菜单
   miViewLang.Clear;
   for var item in g_pub.Languages do
@@ -310,6 +344,7 @@ begin
   end;
 {$ENDIF}
   FSaveDialog := TEnhancedSaveDialog.Create(self);
+  FSaveDialog.DefaultExt := 'json';
   FSaveDialog.Filter := '缩进格式|*.json|缩进格式、转义非ASCII字符|*.json|紧凑格式|*.json|紧凑格式、转义非ASCII字符|*.json';
   SetLang;
   LDocForm := TDocumentWindow.Create(nil);
@@ -336,12 +371,13 @@ begin
   InitMacOsMenu;
   InitMacOsRecentFile;
   InstallApplicationOpenFileDelegate(OpenFileDelegate);
-
 {$ENDIF}
 end;
 
 procedure TfmMain.FormDestroy(Sender: TObject);
 begin
+  FFileWatcher.StopWatching;
+  FFileWatcher.Free;
   fmLogger.Free;
 end;
 
@@ -471,7 +507,6 @@ end;
 -------------------------------------------------------------------------------}
 procedure TfmMain.actFileSaveAsExecute(Sender: TObject);
 begin
-
   if g_pub.DocumentWindowList.LastActive.Doc.FileName = '' then
   begin
     FSaveDialog.FileName := c_untitled_filename;
@@ -484,6 +519,7 @@ begin
 
   if FSaveDialog.Execute then
   begin
+    //if g_pub.DocumentWindowList.LastActive.Doc.FileName <> '' then
     case FSaveDialog.FilterIndex of
       1:
         g_pub.DocumentWindowList.LastActive.Doc.Save(FSaveDialog.FileName, g_pub.Config['editor.indent'].ToInt(4), True, False, False);

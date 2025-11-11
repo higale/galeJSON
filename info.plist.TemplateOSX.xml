@@ -9,5 +9,22 @@
     <string>zh_CN</string>
     <string>en</string>
 </array>
+
+<key>CFBundleDocumentTypes</key>
+<array>
+    <dict>
+        <key>CFBundleTypeExtensions</key>
+        <array>
+            <string>json</string>
+        </array>
+        <key>CFBundleTypeName</key>
+        <string>JSON File</string>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleTypeIconFile</key>
+        <string>galeJSON.icns</string>
+    </dict>
+</array>
+
 </dict>
 </plist>

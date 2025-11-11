@@ -2,8 +2,8 @@ object fmDocument: TfmDocument
   Left = 0
   Top = 0
   Caption = 'gsJSON'
-  ClientHeight = 768
-  ClientWidth = 1024
+  ClientHeight = 803
+  ClientWidth = 1017
   Position = ScreenCenter
   StyleBook = fmMain.StyleBookBlack
   Constraints.MinHeight = 600.000000000000000000
@@ -33,8 +33,8 @@ object fmDocument: TfmDocument
   end
   object pnlSizeBorder: TPanel
     Align = Client
-    Size.Width = 1024.000000000000000000
-    Size.Height = 768.000000000000000000
+    Size.Width = 1017.000000000000000000
+    Size.Height = 803.000000000000000000
     Size.PlatformDefault = False
     StyleLookup = 'panelstyle_radius'
     TabOrder = 6
@@ -42,8 +42,8 @@ object fmDocument: TfmDocument
       Align = Client
       Margins.Left = 5.000000000000000000
       Margins.Right = 5.000000000000000000
-      Size.Width = 1014.000000000000000000
-      Size.Height = 695.000000000000000000
+      Size.Width = 1007.000000000000000000
+      Size.Height = 730.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 0
       object rctFooter: TRectangle
@@ -54,34 +54,17 @@ object fmDocument: TfmDocument
         Margins.Left = -5.000000000000000000
         Margins.Right = -5.000000000000000000
         Position.X = -5.000000000000000000
-        Position.Y = 671.000000000000000000
-        Size.Width = 1024.000000000000000000
+        Position.Y = 706.000000000000000000
+        Size.Width = 1017.000000000000000000
         Size.Height = 24.000000000000000000
         Size.PlatformDefault = False
         Stroke.Kind = None
-        object txtMsg: TText
-          Align = Client
-          HitTest = False
-          Size.Width = 856.000000000000000000
-          Size.Height = 24.000000000000000000
-          Size.PlatformDefault = False
-          Text = 'Message'
-          TextSettings.FontColor = xFF258700
-          object aniMsg: TFloatAnimation
-            Enabled = True
-            Delay = 5.000000000000000000
-            Duration = 0.200000002980232200
-            PropertyName = 'Opacity'
-            StartValue = 1.000000000000000000
-            StopValue = 0.000000000000000000
-          end
-        end
         object rctLinePos: TRectangle
           Align = Right
           Fill.Color = x00808080
           HitTest = False
           Margins.Right = 5.000000000000000000
-          Position.X = 945.000000000000000000
+          Position.X = 938.000000000000000000
           Size.Width = 74.000000000000000000
           Size.Height = 24.000000000000000000
           Size.PlatformDefault = False
@@ -116,8 +99,8 @@ object fmDocument: TfmDocument
         end
         object ErrorLight: TCircle
           Align = Right
-          Fill.Color = claLime
-          Position.X = 915.000000000000000000
+          Fill.Color = xFF00AA00
+          Position.X = 908.000000000000000000
           Size.Width = 30.000000000000000000
           Size.Height = 24.000000000000000000
           Size.PlatformDefault = False
@@ -131,7 +114,7 @@ object fmDocument: TfmDocument
           Align = Right
           Fill.Color = x00808080
           Hint = 'Number of indentation spaces'
-          Position.X = 856.000000000000000000
+          Position.X = 849.000000000000000000
           Size.Width = 29.000000000000000000
           Size.Height = 24.000000000000000000
           Size.PlatformDefault = False
@@ -204,7 +187,7 @@ object fmDocument: TfmDocument
           Align = Right
           Fill.Color = x00B13B2B
           Hint = 'WordWarp'
-          Position.X = 885.000000000000000000
+          Position.X = 878.000000000000000000
           Size.Width = 30.000000000000000000
           Size.Height = 24.000000000000000000
           Size.PlatformDefault = False
@@ -259,11 +242,44 @@ object fmDocument: TfmDocument
             WrapMode = Fit
           end
         end
+        object txtMsg: TText
+          Align = Contents
+          HitTest = False
+          Margins.Right = 170.000000000000000000
+          Margins.Bottom = 2.000000000000000000
+          Size.Width = 847.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.FontColor = xFF258700
+          object aniMsg: TFloatAnimation
+            Enabled = True
+            Delay = 5.000000000000000000
+            Duration = 0.200000002980232200
+            OnFinish = aniMsgFinish
+            PropertyName = 'Opacity'
+            StartValue = 1.000000000000000000
+            StopValue = 0.000000000000000000
+          end
+        end
+        object lblPath: TLabel
+          Align = Left
+          StyledSettings = [Size, Style, FontColor]
+          Opacity = 0.750000000000000000
+          Margins.Left = 10.000000000000000000
+          Margins.Right = 2.000000000000000000
+          Margins.Bottom = 2.000000000000000000
+          Position.X = 10.000000000000000000
+          Size.Width = 592.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Family = #23435#20307
+          TabOrder = 0
+        end
       end
       object lytLeftAndRight: TLayout
         Align = Client
-        Size.Width = 1014.000000000000000000
-        Size.Height = 671.000000000000000000
+        Size.Width = 1007.000000000000000000
+        Size.Height = 706.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
         object rctLeft: TRectangle
@@ -274,8 +290,8 @@ object fmDocument: TfmDocument
           Padding.Top = 1.000000000000000000
           Padding.Right = 1.000000000000000000
           Padding.Bottom = 1.000000000000000000
-          Size.Width = 506.000000000000000000
-          Size.Height = 671.000000000000000000
+          Size.Width = 499.000000000000000000
+          Size.Height = 706.000000000000000000
           Size.PlatformDefault = False
           Stroke.Color = x80808080
           object rctLeftToolBar: TRectangle
@@ -283,7 +299,7 @@ object fmDocument: TfmDocument
             Fill.Color = x20808080
             Position.X = 1.000000000000000000
             Position.Y = 1.000000000000000000
-            Size.Width = 504.000000000000000000
+            Size.Width = 497.000000000000000000
             Size.Height = 34.000000000000000000
             Size.PlatformDefault = False
             Stroke.Kind = None
@@ -412,7 +428,7 @@ object fmDocument: TfmDocument
               Padding.Top = 2.000000000000000000
               Padding.Right = 2.000000000000000000
               Padding.Bottom = 2.000000000000000000
-              Position.X = 297.000000000000000000
+              Position.X = 290.000000000000000000
               Size.Width = 207.000000000000000000
               Size.Height = 34.000000000000000000
               Size.PlatformDefault = False
@@ -851,10 +867,10 @@ object fmDocument: TfmDocument
           object tvJson: TTreeView
             Align = Client
             EnableDragHighlight = False
-            Size.Width = 504.000000000000000000
-            Size.Height = 635.000000000000000000
+            Size.Width = 497.000000000000000000
+            Size.Height = 633.000000000000000000
             Size.PlatformDefault = False
-            TabOrder = 1
+            TabOrder = 0
             OnDragOver = tvJsonDragOver
             OnMouseDown = tvJsonMouseDown
             OnMouseMove = tvJsonMouseMove
@@ -862,8 +878,8 @@ object fmDocument: TfmDocument
             Images = imglstJSONKind
             OnChange = tvJsonChange
             OnDragChange = tvJsonDragChange
-            Viewport.Width = 500.000000000000000000
-            Viewport.Height = 631.000000000000000000
+            Viewport.Width = 493.000000000000000000
+            Viewport.Height = 629.000000000000000000
             object rctDrap: TRectangle
               Fill.Color = xB2005ACC
               HitTest = False
@@ -875,19 +891,91 @@ object fmDocument: TfmDocument
               Stroke.Kind = None
             end
           end
-          object lblPath: TLabel
-            Anchors = [akLeft, akTop, akRight]
-            StyledSettings = [Size, Style, FontColor]
-            Opacity = 0.750000000000000000
-            Margins.Left = 5.000000000000000000
-            Margins.Right = 2.000000000000000000
-            Position.X = 51.000000000000000000
-            Position.Y = 39.000000000000000000
-            Size.Width = 449.000000000000000000
-            Size.Height = 22.000000000000000000
+          object rctFileChangedExternally: TRectangle
+            Align = Bottom
+            Fill.Color = xC8A2F2B5
+            Position.X = 1.000000000000000000
+            Position.Y = 668.000000000000000000
+            Size.Width = 497.000000000000000000
+            Size.Height = 37.000000000000000000
             Size.PlatformDefault = False
-            TextSettings.Font.Family = #23435#20307
-            TabOrder = 0
+            Stroke.Color = claGray
+            XRadius = 5.000000000000000000
+            YRadius = 5.000000000000000000
+            object lblFileChangedExternally: TLabel
+              Align = Client
+              Cursor = crHandPoint
+              StyledSettings = [Family, Size, Style]
+              HitTest = True
+              Margins.Right = 10.000000000000000000
+              Size.Width = 487.000000000000000000
+              Size.Height = 37.000000000000000000
+              Size.PlatformDefault = False
+              TextSettings.FontColor = xFF006EF6
+              TextSettings.HorzAlign = Center
+              Text = #25991#20214#34987#20462#25913#65292#28857#20987#37325#26032#21152#36733
+              TabOrder = 1
+              OnClick = lblFileChangedExternallyClick
+            end
+            object crcCloseFileChangedExternally: TCircle
+              Anchors = [akTop, akRight]
+              Fill.Color = xFFFE1010
+              Opacity = 0.699999988079071000
+              Position.X = 484.000000000000000000
+              Position.Y = 1.000000000000000000
+              Size.Width = 12.000000000000000000
+              Size.Height = 12.000000000000000000
+              Size.PlatformDefault = False
+              Stroke.Color = claNull
+              OnClick = crcCloseFileChangedExternallyClick
+              object TFloatAnimation
+                Duration = 0.200000002980232200
+                PropertyName = 'Opacity'
+                StartValue = 0.750000000000000000
+                StopValue = 1.000000000000000000
+                Trigger = 'IsMouseOver=true'
+                TriggerInverse = 'IsMouseOver=false'
+              end
+              object TPath
+                Align = Client
+                Data.Path = {
+                  3E000000000000006EDB54446EDB3C44020000006EDB5444ABAA404402000000
+                  198653449EE74344020000006EDB50444992464401000000B76D3D4400005A44
+                  020000000CC33A44ABAA5C44020000001986374400005E4402000000DCB63344
+                  00005E44020000009FE72F4400005E4402000000ACAA2C44ABAA5C4402000000
+                  01002A4400005A44010000000100004400003044010000000200AC4300005A44
+                  02000000ADAAA643ABAA5C4402000000C530A04300005E44020000004B929843
+                  00005E4402000000D1F3904300005E4402000000E9798A43ABAA5C4402000000
+                  9424854300005A44010000004C923C434992464402000000A1E731439EE74344
+                  020000004C922C43ABAA4044020000004C922C436EDB3C44020000004C922C43
+                  310C394402000000A1E731433ECF3544020000004C923C439324334401000000
+                  2649B24393240944010000004C923C432649BE4302000000A1E73143D1F3B843
+                  020000004C922C43E979B243020000004C922C436FDBAA43020000004C922C43
+                  F53CA34302000000A1E731430DC39C43020000004C923C43B86D974301000000
+                  942485439424614302000000E9798A43E979564302000000D1F3904394245143
+                  020000004B9298439424514302000000C530A0439424514302000000ADAAA643
+                  E9795643020000000200AC439424614301000000010000444A92C44301000000
+                  01002A449424614302000000ACAA2C44E9795643020000009FE72F4494245143
+                  02000000DCB6334494245143020000001986374494245143020000000CC33A44
+                  E979564302000000B76D3D4494246143010000006EDB5044B86D974302000000
+                  198653440DC39C43020000006EDB5444F53CA343020000006EDB54446FDBAA43
+                  020000006EDB5444E979B2430200000019865344D1F3B843020000006EDB5044
+                  2649BE43010000006EDB264493240944010000006EDB50449324334402000000
+                  198653443ECF3544020000006EDB5444310C3944020000006EDB54446EDB3C44
+                  030000006EDB54446EDB3C44}
+                Fill.Color = claWhite
+                Locked = True
+                HitTest = False
+                Margins.Left = 3.000000000000000000
+                Margins.Top = 3.000000000000000000
+                Margins.Right = 3.000000000000000000
+                Margins.Bottom = 3.000000000000000000
+                Size.Width = 6.000000000000000000
+                Size.Height = 6.000000000000000000
+                Size.PlatformDefault = False
+                Stroke.Kind = None
+              end
+            end
           end
         end
         object rctRight: TRectangle
@@ -897,9 +985,9 @@ object fmDocument: TfmDocument
           Padding.Top = 1.000000000000000000
           Padding.Right = 1.000000000000000000
           Padding.Bottom = 1.000000000000000000
-          Position.X = 508.000000000000000000
+          Position.X = 501.000000000000000000
           Size.Width = 506.000000000000000000
-          Size.Height = 671.000000000000000000
+          Size.Height = 706.000000000000000000
           Size.PlatformDefault = False
           Stroke.Color = x80808080
           object rctRightTopBar: TRectangle
@@ -977,7 +1065,7 @@ object fmDocument: TfmDocument
             Align = Client
             Fill.Kind = None
             Size.Width = 504.000000000000000000
-            Size.Height = 635.000000000000000000
+            Size.Height = 670.000000000000000000
             Size.PlatformDefault = False
             Stroke.Kind = None
             object mmoEdit: TMemo
@@ -988,16 +1076,16 @@ object fmDocument: TfmDocument
               TextSettings.Font.Family = #23435#20307
               TextSettings.FontColor = claWhite
               OnChangeTracking = mmoEditChangeTracking
-              Align = Contents
+              Align = Client
               Size.Width = 504.000000000000000000
-              Size.Height = 635.000000000000000000
+              Size.Height = 585.000000000000000000
               Size.PlatformDefault = False
               TabOrder = 0
               OnDragOver = JsonFileDragOver
               OnDragDrop = JsonFileDragDrop
               OnViewportPositionChange = mmoEditViewportPositionChange
               Viewport.Width = 500.000000000000000000
-              Viewport.Height = 629.000000000000000000
+              Viewport.Height = 579.000000000000000000
             end
             object rctForBoolValue: TRectangle
               Align = Top
@@ -1035,6 +1123,92 @@ object fmDocument: TfmDocument
                 OnChange = rbTrueFalseChange
               end
             end
+            object rctErrorInfo: TRectangle
+              Align = Bottom
+              Fill.Color = xC8FFFF78
+              Position.Y = 626.000000000000000000
+              Size.Width = 504.000000000000000000
+              Size.Height = 44.000000000000000000
+              Size.PlatformDefault = False
+              Stroke.Color = claGray
+              XRadius = 5.000000000000000000
+              YRadius = 5.000000000000000000
+              object lblErrorInfo: TLabel
+                Align = Client
+                StyledSettings = [Family, Style]
+                HitTest = True
+                Margins.Left = 5.000000000000000000
+                Margins.Right = 5.000000000000000000
+                Size.Width = 494.000000000000000000
+                Size.Height = 44.000000000000000000
+                Size.PlatformDefault = False
+                TextSettings.Font.Size = 10.500000000000000000
+                TextSettings.FontColor = xFF00AA00
+                TextSettings.HorzAlign = Center
+                Text = 'No Error'
+                TabOrder = 1
+                OnClick = lblErrorInfoClick
+              end
+              object crcColseErrorInfo: TCircle
+                Anchors = [akTop, akRight]
+                Fill.Color = xFFFE1010
+                Opacity = 0.699999988079071000
+                Position.X = 491.000000000000000000
+                Position.Y = 1.000000000000000000
+                Size.Width = 12.000000000000000000
+                Size.Height = 12.000000000000000000
+                Size.PlatformDefault = False
+                Stroke.Color = claNull
+                OnClick = crcColseErrorInfoClick
+                object TFloatAnimation
+                  Duration = 0.200000002980232200
+                  PropertyName = 'Opacity'
+                  StartValue = 0.750000000000000000
+                  StopValue = 1.000000000000000000
+                  Trigger = 'IsMouseOver=true'
+                  TriggerInverse = 'IsMouseOver=false'
+                end
+                object TPath
+                  Align = Client
+                  Data.Path = {
+                    3E000000000000006EDB54446EDB3C44020000006EDB5444ABAA404402000000
+                    198653449EE74344020000006EDB50444992464401000000B76D3D4400005A44
+                    020000000CC33A44ABAA5C44020000001986374400005E4402000000DCB63344
+                    00005E44020000009FE72F4400005E4402000000ACAA2C44ABAA5C4402000000
+                    01002A4400005A44010000000100004400003044010000000200AC4300005A44
+                    02000000ADAAA643ABAA5C4402000000C530A04300005E44020000004B929843
+                    00005E4402000000D1F3904300005E4402000000E9798A43ABAA5C4402000000
+                    9424854300005A44010000004C923C434992464402000000A1E731439EE74344
+                    020000004C922C43ABAA4044020000004C922C436EDB3C44020000004C922C43
+                    310C394402000000A1E731433ECF3544020000004C923C439324334401000000
+                    2649B24393240944010000004C923C432649BE4302000000A1E73143D1F3B843
+                    020000004C922C43E979B243020000004C922C436FDBAA43020000004C922C43
+                    F53CA34302000000A1E731430DC39C43020000004C923C43B86D974301000000
+                    942485439424614302000000E9798A43E979564302000000D1F3904394245143
+                    020000004B9298439424514302000000C530A0439424514302000000ADAAA643
+                    E9795643020000000200AC439424614301000000010000444A92C44301000000
+                    01002A449424614302000000ACAA2C44E9795643020000009FE72F4494245143
+                    02000000DCB6334494245143020000001986374494245143020000000CC33A44
+                    E979564302000000B76D3D4494246143010000006EDB5044B86D974302000000
+                    198653440DC39C43020000006EDB5444F53CA343020000006EDB54446FDBAA43
+                    020000006EDB5444E979B2430200000019865344D1F3B843020000006EDB5044
+                    2649BE43010000006EDB264493240944010000006EDB50449324334402000000
+                    198653443ECF3544020000006EDB5444310C3944020000006EDB54446EDB3C44
+                    030000006EDB54446EDB3C44}
+                  Fill.Color = claWhite
+                  Locked = True
+                  HitTest = False
+                  Margins.Left = 3.000000000000000000
+                  Margins.Top = 3.000000000000000000
+                  Margins.Right = 3.000000000000000000
+                  Margins.Bottom = 3.000000000000000000
+                  Size.Width = 6.000000000000000000
+                  Size.Height = 6.000000000000000000
+                  Size.PlatformDefault = False
+                  Stroke.Kind = None
+                end
+              end
+            end
           end
         end
         object slL_R: TSplitter
@@ -1043,10 +1217,10 @@ object fmDocument: TfmDocument
           MinSize = 300.000000000000000000
           Margins.Left = -4.000000000000000000
           Margins.Right = -4.000000000000000000
-          Position.X = 502.000000000000000000
+          Position.X = 495.000000000000000000
           ShowGrip = False
           Size.Width = 10.000000000000000000
-          Size.Height = 671.000000000000000000
+          Size.Height = 706.000000000000000000
           Size.PlatformDefault = False
           OnMouseUp = slL_RMouseUp
         end
@@ -1062,7 +1236,7 @@ object fmDocument: TfmDocument
       Margins.Right = 1.000000000000000000
       Position.X = 1.000000000000000000
       Position.Y = 1.000000000000000000
-      Size.Width = 1022.000000000000000000
+      Size.Width = 1015.000000000000000000
       Size.Height = 34.000000000000000000
       Size.PlatformDefault = False
       Stroke.Thickness = 0.000000000000000000
@@ -1076,7 +1250,7 @@ object fmDocument: TfmDocument
         Margins.Left = 1.000000000000000000
         Margins.Top = 1.000000000000000000
         Margins.Right = 1.000000000000000000
-        Size.Width = 1020.000000000000000000
+        Size.Width = 1013.000000000000000000
         Size.Height = 33.000000000000000000
         Size.PlatformDefault = False
         Stroke.Kind = None
@@ -1086,7 +1260,7 @@ object fmDocument: TfmDocument
         OnDragDrop = JsonFileDragDrop
         object TLayout
           Align = Right
-          Position.X = 889.000000000000000000
+          Position.X = 882.000000000000000000
           Size.Width = 131.000000000000000000
           Size.Height = 33.000000000000000000
           Size.PlatformDefault = False
@@ -1359,7 +1533,7 @@ object fmDocument: TfmDocument
         Locked = True
         Position.X = 146.000000000000000000
         Position.Y = 1.000000000000000000
-        Size.Width = 727.000000000000000000
+        Size.Width = 720.000000000000000000
         Size.Height = 33.000000000000000000
         Size.PlatformDefault = False
         TextSettings.HorzAlign = Center
@@ -1372,7 +1546,7 @@ object fmDocument: TfmDocument
       Fill.Kind = None
       HitTest = False
       Position.Y = 35.000000000000000000
-      Size.Width = 1024.000000000000000000
+      Size.Width = 1017.000000000000000000
       Size.Height = 38.000000000000000000
       Size.PlatformDefault = False
       Stroke.Kind = None

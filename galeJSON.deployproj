@@ -7,7 +7,7 @@
     <ItemGroup Condition="'$(Platform)'=='OSX64'">
         <DeployFile Include="$(ProjectName).Artwork\macOS\AppIcon.icns" Condition="'$(Config)'=='Debug'">
             <RemoteDir>galeJSON.app\Contents\Resources\</RemoteDir>
-            <RemoteName>gsJSON.icns</RemoteName>
+            <RemoteName>galeJSON.icns</RemoteName>
             <DeployClass>ProjectOSXResource</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
@@ -23,9 +23,9 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="OSX64\Debug\gsJSON.entitlements" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="OSX64\Debug\galeJSON.entitlements" Condition="'$(Config)'=='Debug'">
             <RemoteDir>galeJSON.app\..\</RemoteDir>
-            <RemoteName>gsJSON.entitlements</RemoteName>
+            <RemoteName>galeJSON.entitlements</RemoteName>
             <DeployClass>ProjectOSXEntitlements</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
@@ -79,7 +79,7 @@
             <Overwrite>True</Overwrite>
             <Required>True</Required>
         </DeployFile>
-        <DeployFile Include="OSX64\Debug\gsJSON.info.plist" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="OSX64\Debug\galeJSON.info.plist" Condition="'$(Config)'=='Debug'">
             <RemoteDir>galeJSON.app\Contents\</RemoteDir>
             <RemoteName>Info.plist</RemoteName>
             <DeployClass>ProjectOSXInfoPList</DeployClass>

@@ -4,7 +4,7 @@ interface
 
 uses
   jsonhelper, JsonDocument,
-  WinSizeUtil, LineNumbersMemoFMX,
+  WinSizeUtil, LineNumbersMemoFMX, System.RegularExpressions,
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   System.Math, System.StrUtils, FMX.DialogService,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
@@ -15,6 +15,23 @@ uses
   System.Math.Vectors, FMX.Controls3D, FMX.Layers3D, FMX.EditBox, FMX.NumberBox;
 
 type
+  TJsonErrorData = class
+  private
+    FIsPositionable: boolean;
+    FErrorString: String;
+    FPath: string;
+    FLine: integer;
+    FPosition: integer;
+    FOffset: integer;
+    procedure SetErrorString(const AValue: string);
+    function FormatMessage: string;
+  public
+    property ErrorString: string read FErrorString write SetErrorString;
+  public
+    constructor Create;
+    procedure Clear;
+  end;
+
   TfmDocument = class(TForm)
     pmTreeViewItem: TPopupMenu;
     miMoveDown: TMenuItem;
@@ -100,7 +117,6 @@ type
     mi1: TMenuItem;
     miWindowShowAll: TMenuItem;
     miWindowItems: TMenuItem;
-    lblPath: TLabel;
     rctLinePos: TRectangle;
     lblLineAndPos: TLabel;
     ErrorLight: TCircle;
@@ -110,6 +126,13 @@ type
     ColorAnimation13: TColorAnimation;
     miViewLang: TMenuItem;
     pathWordWrap: TPath;
+    lblPath: TLabel;
+    rctErrorInfo: TRectangle;
+    crcColseErrorInfo: TCircle;
+    lblErrorInfo: TLabel;
+    rctFileChangedExternally: TRectangle;
+    crcCloseFileChangedExternally: TCircle;
+    lblFileChangedExternally: TLabel;
     procedure tvJsonChange(Sender: TObject);
     procedure mmoEditChangeTracking(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -119,7 +142,7 @@ type
     procedure rctBtnCloseClick(Sender: TObject);
     procedure rctBtnMaxClick(Sender: TObject);
     procedure rctBtnMinClick(Sender: TObject);
-    procedure mmoEditViewportPositionChange(Sender: TObject; const OldViewportPosition, NewViewportPosition: TPointF; const ContentSizeChanged: Boolean);
+    procedure mmoEditViewportPositionChange(Sender: TObject; const OldViewportPosition, NewViewportPosition: TPointF; const ContentSizeChanged: boolean);
     procedure edtNameChangeTracking(Sender: TObject);
     procedure rctBtnCollapseAllMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
     procedure rctBtnExpandAllMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
@@ -127,7 +150,7 @@ type
     procedure rctWordWarpClick(Sender: TObject);
     procedure rctBtnMoveUpMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
     procedure rctBtnMoveDownMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
-    procedure tvJsonDragChange(SourceItem, DestItem: TTreeViewItem; var Allow: Boolean);
+    procedure tvJsonDragChange(SourceItem, DestItem: TTreeViewItem; var Allow: boolean);
     procedure tvJsonDragOver(Sender: TObject; const Data: TDragObject; const Point: TPointF; var Operation: TDragOperation);
     procedure tvJsonMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
     procedure rctBtnDeleteClick(Sender: TObject);
@@ -144,25 +167,31 @@ type
     procedure FormActivate(Sender: TObject);
     procedure miWindowShowAllApplyStyleLookup(Sender: TObject);
     procedure ErrorLightClick(Sender: TObject);
+    procedure aniMsgFinish(Sender: TObject);
+    procedure crcColseErrorInfoClick(Sender: TObject);
+    procedure lblErrorInfoClick(Sender: TObject);
+    procedure lblFileChangedExternallyClick(Sender: TObject);
+    procedure crcCloseFileChangedExternallyClick(Sender: TObject);
   private
     FDoc: TJsonDocument;
-    FIsUpdating: Boolean;
+    FIsUpdating: boolean;
     FLinesMemoUtil: TLinesMemoUtil;
-    FIndent: Integer;
+    FIndent: integer;
     FCurrentJSONKind: TJSONKind;
     FRightPanelWidthPercent: Single; // 右侧宽度占整个窗口的比例
-    procedure SetIndent(AValue: Integer);
-    function GetWordWarp: Boolean;
-    procedure SetWordWarp(AValue: Boolean);
-    property Indent: Integer read FIndent write SetIndent;
-    property WordWarp: Boolean read GetWordWarp write SetWordWarp;
+    FJsonErrorData: TJsonErrorData;
+    procedure SetIndent(AValue: integer);
+    function GetWordWarp: boolean;
+    procedure SetWordWarp(AValue: boolean);
+    property Indent: integer read FIndent write SetIndent;
+    property WordWarp: boolean read GetWordWarp write SetWordWarp;
   public
     property Doc: TJsonDocument read FDoc;
   private
     procedure InitUI;
     procedure miFileOepnedClick(Sender: TObject);
     procedure miRecentFilesClick(Sender: TObject);
-    procedure FilenameChanged(ASender: TObject);
+    procedure FilenameChanged(ASender: TObject; AOld, ANew: string);
     procedure SetErrInfo(const AMsg: string);
   public
     procedure SetLang;
@@ -171,7 +200,7 @@ type
     procedure SetStyleBook;
     procedure InitOpenedFileMenu;
     procedure InitRecentFile;
-    procedure ShowInfo(AText: string; ALevel: Integer = 0; ADelay: Single = 3.0);
+    procedure ShowInfo(AText: string; ALevel: integer = 0; ADelay: Single = 3.0);
   end;
 
 var
@@ -183,9 +212,60 @@ implementation
 
 
 uses JSONTreeView, memo_json_auto, data_const, pub, Logger, fmFontDialog,
-  rjson, FormMain;
+  rjson, FormMain, FileWatcher;
 
-procedure TfmDocument.FilenameChanged(ASender: TObject);
+procedure TJsonErrorData.SetErrorString(const AValue: string);
+var
+  Match: TMatch;
+begin
+  g_logger.Debug(AValue);
+  if AValue <> FErrorString then
+  begin
+    FErrorString := AValue;
+    if FErrorString.IsEmpty then
+    begin
+      FIsPositionable := False;
+    end
+    else
+    begin
+      Match := TRegEx.Match(FErrorString, 'Path ''([^'']*)'', line (\d+), position (\d+) \(offset (\d+)\)');
+      FIsPositionable := Match.Success;
+      if FIsPositionable then
+      begin
+        FPath := Match.Groups[1].Value;
+        FLine := Match.Groups[2].Value.ToInteger;
+        FPosition := Match.Groups[3].Value.ToInteger;
+        FOffset := Match.Groups[4].Value.ToInteger;
+      end;
+    end;
+  end;
+end;
+
+constructor TJsonErrorData.Create;
+begin
+  inherited;
+  Clear;
+end;
+
+procedure TJsonErrorData.Clear;
+begin
+  FErrorString := '';
+  FIsPositionable := False;
+end;
+
+function TJsonErrorData.FormatMessage: string;
+begin
+  if FIsPositionable then
+  begin
+    Result := Format(g_pub.LangStr('strJsonError'), [FPath, FLine, FPosition, FOffset]);
+  end
+  else
+  begin
+    Result := FErrorString;
+  end;
+end;
+
+procedure TfmDocument.FilenameChanged(ASender: TObject; AOld, ANew: string);
 var
   strTmp: string;
 begin
@@ -210,18 +290,22 @@ begin
 {$IFDEF MACOS}
   Caption := app_name + ' ' + app_version + ' [' + lblFilename.Text + ']';
 {$ENDIF}
+  //g_logger.Debug('FilenameChanged, Old:%s New:%s', [AOld, ANew]);
 end;
 
 procedure TfmDocument.SetErrInfo(const AMsg: string);
 begin
-  ErrorLight.TagString := AMsg;
-  ErrorLight.Fill.Color := IfThen(AMsg.IsEmpty, $FF00FF00, $FFFF0000);
+  ErrorLight.Fill.Color := IfThen(AMsg.IsEmpty, $FF00AA00, $FFDD0000);
+  lblErrorInfo.FontColor := ErrorLight.Fill.Color;
+  FJsonErrorData.ErrorString := IfThen(AMsg.IsEmpty, 'No Error', AMsg);
+  lblErrorInfo.Text := FJsonErrorData.FormatMessage;
 end;
 
 procedure TfmDocument.FormCreate(Sender: TObject);
 var
   LDisplay: TDisplay;
 begin
+  FJsonErrorData := TJsonErrorData.Create;
   FDoc := TJsonDocument.Create;
   FDoc.OnFilenameChanged := FilenameChanged;
   if g_pub.DocumentWindowList.LastActive <> nil then
@@ -248,7 +332,10 @@ end;
 
 procedure TfmDocument.FormDestroy(Sender: TObject);
 begin
+  if FDoc.FileName <> '' then
+    fmMain.FileWatcher.RemoveTarget(FDoc.FileName);
   FDoc.Free;
+  FJsonErrorData.Free;
 end;
 
 procedure TfmDocument.FormResize(Sender: TObject);
@@ -304,13 +391,13 @@ begin
   SetStyleBook;
   FRightPanelWidthPercent := 0.5;
   rctRight.Width := (Width - 10) * FRightPanelWidthPercent;
-
+  rctErrorInfo.Visible := False;
   OnResize := FormResize;
 end;
 
 procedure TfmDocument.SetStyleBook;
 const
-  c_PathColors: array [Boolean] of TAlphaColor = ({false:}$FF000000, {true:}$FFFFFFFF);
+  c_PathColors: array [boolean] of TAlphaColor = ({false:}$FF000000, {true:}$FFFFFFFF);
 begin
   tvJson.ScrollBy(tvJson.ViewportPosition.X, tvJson.ViewportPosition.Y); // 否则切换时会偶发异常
   StyleBook := g_pub.StyleBook;
@@ -328,6 +415,7 @@ begin
 {$ENDIF}
   rctIndent.Hint := g_pub.LangStr('strIndent');
   rctWordWarp.Hint := g_pub.LangStr('strWordWarp');
+  lblFileChangedExternally.Text := g_pub.LangStr('strFileChangedExternally');
 end;
 
 procedure TfmDocument.NewFile;
@@ -335,6 +423,7 @@ begin
   FDoc.New;
   FIsUpdating := True;
   try
+    rctFileChangedExternally.Visible := False;
     tvJson.Clear;
     SetTreeItem(tvJson, FDoc.JsonRoot);
     tvJson.ExpandAll;
@@ -350,6 +439,7 @@ end;
 
 procedure TfmDocument.OpenFile(const AFilename: string);
 begin
+  rctFileChangedExternally.Visible := False;
   if FDoc.Open(AFilename, True, False) then
   begin
     FIsUpdating := True;
@@ -381,7 +471,7 @@ var
   LJsonKind: TJSONKind;
 begin
   if FIsUpdating then
-    Exit;
+    exit;
   FIsUpdating := True;
   try
     SetErrInfo('');
@@ -389,7 +479,7 @@ begin
     if selItem = nil then
     begin
       mmoEdit.Text := '';
-      Exit;
+      exit;
     end;
 
     edtName.Text := selItem.LastPath;
@@ -408,7 +498,7 @@ begin
       mmoEdit.Text := selItem.Value;
       if LJsonKind = jkBoolean then
       begin
-        rbTrue.IsChecked := selItem.JsonValue.AsType<Boolean>;
+        rbTrue.IsChecked := selItem.JsonValue.AsType<boolean>;
         rbFalse.IsChecked := not rbTrue.IsChecked;
       end;
     end;
@@ -417,7 +507,7 @@ begin
   end;
 end;
 
-procedure TfmDocument.tvJsonDragChange(SourceItem, DestItem: TTreeViewItem; var Allow: Boolean);
+procedure TfmDocument.tvJsonDragChange(SourceItem, DestItem: TTreeViewItem; var Allow: boolean);
 var
   Pos: TPointF;
   Source, Dest: TJSONTreeViewItem;
@@ -425,7 +515,7 @@ begin
   Allow := False;
   rctDrap.Visible := False;
   if DestItem = nil then
-    Exit;
+    exit;
 
   Dest := TJSONTreeViewItem(DestItem);
   Source := TJSONTreeViewItem(SourceItem);
@@ -433,9 +523,9 @@ begin
   if Source.IsChild(Dest) then
   begin
 {$IFDEF DEBUG}
-    g_Logger.Debug('父条目不能插入子条目！');
+    g_logger.Debug('父条目不能插入子条目！');
 {$ENDIF}
-    Exit;
+    exit;
   end;
 
   Pos := Dest.ScreenToLocal(Screen.MousePos);
@@ -444,13 +534,13 @@ begin
     if ((Dest.ParentItem = Source.ParentItem) and (Dest.Index - Source.Index = 1)) or (Dest.ParentItem = nil) then
     begin
 {$IFDEF DEBUG}
-      g_Logger.Debug('Do nothing');
+      g_logger.Debug('Do nothing');
 {$ENDIF}
     end
     else
     begin
 {$IFDEF DEBUG}
-      g_Logger.Debug('前边插入');
+      g_logger.Debug('前边插入');
 {$ENDIF}
       TJSONTreeViewItem(Source).ExtractFromParent(True);
       TJSONTreeViewItem(Dest.ParentItem).InsertItem(Dest.Index, Source, True);
@@ -462,13 +552,13 @@ begin
     if ((Dest.ParentItem = Source.ParentItem) and (Source.Index - Dest.Index = 1)) or (Dest.ParentItem = nil) then
     begin
 {$IFDEF DEBUG}
-      g_Logger.Debug('Do nothing');
+      g_logger.Debug('Do nothing');
 {$ENDIF}
     end
     else
     begin
 {$IFDEF DEBUG}
-      g_Logger.Debug('后边插入');
+      g_logger.Debug('后边插入');
 {$ENDIF}
       TJSONTreeViewItem(Source).ExtractFromParent(True);
       TJSONTreeViewItem(Dest.ParentItem).InsertItem(Dest.Index + 1, Source, True);
@@ -480,13 +570,13 @@ begin
     if not Dest.JsonValue.IsObjectOrArray then
     begin
 {$IFDEF DEBUG}
-      g_Logger.Debug('Do nothing');
+      g_logger.Debug('Do nothing');
 {$ENDIF}
     end
     else
     begin
 {$IFDEF DEBUG}
-      g_Logger.Debug('插入子项');
+      g_logger.Debug('插入子项');
 {$ENDIF}
       TJSONTreeViewItem(Source).ExtractFromParent(True);
       Dest.AddItem(Source, True);
@@ -506,10 +596,10 @@ begin
   Operation := TDragOperation.None;
   Dest := TJSONTreeViewItem(tvJson.ItemByPoint(Point.X, Point.Y));
   if Dest = nil then
-    Exit;
+    exit;
   Source := TJSONTreeViewItem(Data.Source);
   if Source.IsChild(Dest) then
-    Exit;
+    exit;
   LRect := Dest.BoundsRect;
   Pos := Dest.ScreenToLocal(Screen.MousePos);
   LPoint := tvJson.ScreenToLocal(Dest.LocalToScreen(PointF(0, 0)));
@@ -587,6 +677,11 @@ end;
   说明: 关于
   参数: Sender
 -------------------------------------------------------------------------------}
+procedure TfmDocument.aniMsgFinish(Sender: TObject);
+begin
+  lblPath.Visible := True;
+end;
+
 procedure TfmDocument.cbValueTypeChange(Sender: TObject);
 var
   LJValue:
@@ -594,7 +689,7 @@ var
   treeItem:
     TJSONTreeViewItem;
   bValue:
-    Boolean;
+    boolean;
 begin
   FCurrentJSONKind := TJSONKind(cbValueType.ItemIndex + 1);
   rctForBoolValue.Visible := FCurrentJSONKind = jkBoolean;
@@ -603,7 +698,7 @@ begin
 
   treeItem := TJSONTreeViewItem(tvJson.Selected);
   if FIsUpdating or (treeItem = nil) then
-    Exit;
+    exit;
 
   LJValue := nil;
   FIsUpdating := True;
@@ -691,12 +786,22 @@ begin
   end;
 end;
 
+procedure TfmDocument.crcCloseFileChangedExternallyClick(Sender: TObject);
+begin
+  rctFileChangedExternally.Visible := False;
+end;
+
+procedure TfmDocument.crcColseErrorInfoClick(Sender: TObject);
+begin
+  rctErrorInfo.Visible := False;
+end;
+
 procedure TfmDocument.edtNameChangeTracking(Sender: TObject);
 var
   treeItem: TJSONTreeViewItem;
 begin
   if FIsUpdating or Trim(edtName.Text).IsEmpty then
-    Exit;
+    exit;
   FIsUpdating := True;
   try
     treeItem := TJSONTreeViewItem(tvJson.Selected);
@@ -712,20 +817,19 @@ end;
 
 procedure TfmDocument.ErrorLightClick(Sender: TObject);
 begin
-  if not ErrorLight.TagString.IsEmpty then
-    ShowInfo(ErrorLight.TagString, 1, 5);
+  rctErrorInfo.Visible := not rctErrorInfo.Visible;
 end;
 
 procedure TfmDocument.FormActivate(Sender: TObject);
 var
-  LIndex: Integer;
+  LIndex: integer;
 begin
   LIndex := g_pub.DocumentWindowList.IndexOf(self);
   if LIndex > 0 then
   begin
     g_pub.DocumentWindowList.Move(LIndex, 0);
 {$IFDEF DEBUG}
-    g_Logger.Debug('窗口激活，移动到列表首位！');
+    g_logger.Debug('窗口激活，移动到列表首位！');
 {$ENDIF}
   end;
 end;
@@ -746,7 +850,7 @@ var
 begin
   treeItem := TJSONTreeViewItem(tvJson.Selected);
   if FIsUpdating or (treeItem = nil) then
-    Exit;
+    exit;
   LJValue := nil;
   SetErrInfo('');
   FIsUpdating := True;
@@ -794,7 +898,7 @@ begin
   end;
 end;
 
-procedure TfmDocument.mmoEditViewportPositionChange(Sender: TObject; const OldViewportPosition, NewViewportPosition: TPointF; const ContentSizeChanged: Boolean);
+procedure TfmDocument.mmoEditViewportPositionChange(Sender: TObject; const OldViewportPosition, NewViewportPosition: TPointF; const ContentSizeChanged: boolean);
 begin
   lblLineAndPos.Text := (mmoEdit.CaretPosition.Line + 1).ToString + ': ' + (mmoEdit.CaretPosition.Pos + 1).ToString;
 end;
@@ -808,7 +912,7 @@ begin
   begin
     for var i := 0 to pmTreeViewItem.ItemsCount - 1 do
       pmTreeViewItem.Items[i].Enabled := False;
-    Exit;
+    exit;
   end;
   fmMain.actEditMoveUp.Enabled := selItem.Index <> 0;
   fmMain.actEditMoveDown.Enabled := (selItem.ParentItem <> nil) and (selItem.Index < selItem.ParentItem.Count - 1);
@@ -820,7 +924,7 @@ var
 begin
   treeItem := TJSONTreeViewItem(tvJson.Selected);
   if FIsUpdating or (treeItem = nil) then
-    Exit;
+    exit;
   mmoEdit.Text := rbTrue.IsChecked.ToString(TUseBoolStrs.True).ToLower;
 end;
 
@@ -828,12 +932,12 @@ procedure TfmDocument.rctBtnAddItemMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Single);
 var
   newItem, selItem, parItem: TJSONTreeViewItem;
-  LIndex: Integer;
+  LIndex: integer;
 begin
   if tvJson.Selected = nil then
-    Exit;
+    exit;
   if tvJson.Selected.ParentItem = nil then
-    Exit;
+    exit;
   selItem := TJSONTreeViewItem(tvJson.Selected);
   parItem := selItem.MyParentItem;
   LIndex := selItem.Index;
@@ -856,10 +960,10 @@ var
   newItem, selItem: TJSONTreeViewItem;
 begin
   if tvJson.Selected = nil then
-    Exit;
+    exit;
   selItem := TJSONTreeViewItem(tvJson.Selected);
   if not selItem.JsonValue.IsObjectOrArray then
-    Exit;
+    exit;
   newItem := TJSONTreeViewItem.Create(nil);
   if selItem.JsonValue is TJSONObject then
   begin
@@ -890,12 +994,12 @@ procedure TfmDocument.rctBtnDeleteClick(Sender: TObject);
 var
   selItem: TJSONTreeViewItem;
   parItem: TJSONTreeViewItem;
-  LIndex: Integer;
+  LIndex: integer;
 begin
   if tvJson.Selected = nil then
-    Exit;
+    exit;
   if tvJson.Selected.ParentItem = nil then
-    Exit;
+    exit;
   TDialogService.MessageDialog('Confirm deletion of this item?', TMsgDlgType.mtConfirmation, [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo], TMsgDlgBtn.mbNo, 0,
     procedure(const AResult: TModalResult)
     begin
@@ -1073,6 +1177,21 @@ begin
     Operation := TDragOperation.Link;
 end;
 
+procedure TfmDocument.lblErrorInfoClick(Sender: TObject);
+begin
+
+  if FJsonErrorData.FIsPositionable then
+  begin
+    mmoEdit.CaretPosition := TCaretPosition.Create(FJsonErrorData.FLine - 1, FJsonErrorData.FPosition - 1);
+  end;
+end;
+
+procedure TfmDocument.lblFileChangedExternallyClick(Sender: TObject);
+begin
+  rctFileChangedExternally.Visible := False;
+  OpenFile(Doc.FileName);
+end;
+
 procedure TfmDocument.rctWordWarpClick(Sender: TObject);
 begin
   WordWarp := not WordWarp;
@@ -1086,10 +1205,10 @@ begin
   FRightPanelWidthPercent := rctRight.Width / (pnlSizeBorder.Width - 10);
 end;
 
-procedure TfmDocument.SetIndent(AValue: Integer);
+procedure TfmDocument.SetIndent(AValue: integer);
 begin
   if FIndent = AValue then
-    Exit;
+    exit;
   FIndent := AValue;
 
   lblIndent.Text := AValue.ToString;
@@ -1109,19 +1228,19 @@ begin
   end;
 end;
 
-function TfmDocument.GetWordWarp: Boolean;
+function TfmDocument.GetWordWarp: boolean;
 begin
   Result := mmoEdit.TextSettings.WordWrap;
 end;
 
-procedure TfmDocument.SetWordWarp(AValue: Boolean);
+procedure TfmDocument.SetWordWarp(AValue: boolean);
 begin
   if mmoEdit.TextSettings.WordWrap = AValue then
-    Exit;
+    exit;
   FIsUpdating := True;
   try
     mmoEdit.TextSettings.WordWrap := AValue;
-    pathWordWrap.Fill.Color := IfThen(mmoEdit.TextSettings.WordWrap,  $FF00FF00,  $FF808080);
+    pathWordWrap.Fill.Color := IfThen(mmoEdit.TextSettings.WordWrap, $FF00AA00, $FF808080);
   finally
     FIsUpdating := False;
   end;
@@ -1177,9 +1296,10 @@ begin
   end;
 end;
 
-procedure TfmDocument.ShowInfo(AText: string; ALevel: Integer = 0; ADelay: Single = 3.0);
+procedure TfmDocument.ShowInfo(AText: string; ALevel: integer = 0; ADelay: Single = 3.0);
 begin
   aniMsg.Stop;
+  lblPath.Visible := False;
   txtMsg.Text := AText;
   case ALevel of
     0:
